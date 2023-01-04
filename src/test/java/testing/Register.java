@@ -26,7 +26,7 @@ class Register {
 	static void setUpBeforeClass() throws Exception {
 		System.setProperty("webdriver.chrome.driver", "C:\\Users\\ajdin\\Desktop\\chromedriver.exe");
 		webDriver = new ChromeDriver();
-		baseUrl = "https://trello.com/signup";
+		baseUrl = "https://id.atlassian.com/signup";
 	}
 
 	@AfterAll
@@ -36,7 +36,7 @@ class Register {
 	@Test
 	void TestHeader() throws InterruptedException {
 		webDriver.get(baseUrl);
-		WebElement header = webDriver.findElement(By.xpath("//*[@id=\"signup-password\"]/h1"));
+		WebElement header = webDriver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/div[2]/div[2]/div/section/div[1]/h5"));
 		assertEquals(header.getText(),"Sign up for your account");
 	}
 	@Test
@@ -44,7 +44,20 @@ class Register {
 		webDriver.get(baseUrl);
 		WebElement inputEmail = webDriver.findElement(By.xpath("//*[@id=\"email\"]"));
 		inputEmail.sendKeys(getRandomMail());
-		Thread.sleep(2000);
+		WebElement submit = webDriver.findElement(By.xpath("//*[@id=\"signup-submit\"]"));
+		submit.click();
+		/*
+		 * Captcha
+		 */
+		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[3]/div[2]/iframe")));
+		assertEquals(wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"email-sent-page\"]/div[2]/span"))).getText(),
+				"To complete setup and log in, click the verification link in the email we’ve sent to");
+		WebElement resendVerification = webDriver.findElement(By.xpath("//*[@id=\"welcome-send-validation-submit\"]/span"));
+		resendVerification.click();
+		assertEquals(wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[2]/div/div/div/div/div/div/div[1]/div/span[2]"))).getText(),
+				"We've sent you an email!");
+		
 	}
 	protected String getRandomMail() {
         String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
