@@ -110,9 +110,57 @@ class Trello {
 		WebElement addCardConfirm3 = webDriver.findElement(By.xpath("//*[@id=\"board\"]/div[1]/div/div[2]/div/div[2]/div[1]/input"));
 		addCardConfirm3.click();
 	}
-	
 	@Test
 	@Order(6)
+	void EnterCard() throws InterruptedException { 
+		WebElement card = webDriver.findElement(By.xpath("//*[@id=\"board\"]/div[1]/div/div[2]/a/div[3]"));
+		card.click();
+	}
+	@Test
+	@Order(7)
+	void ModifyCardsDescription() throws InterruptedException { 
+	    try {
+	    	Thread.sleep(2500);
+	    	WebElement enterDescr = webDriver.findElement(By.xpath("//*[@id=\"chrome-container\"]/div[3]/div/div/div/div[4]/div[2]/div/div/div/div[2]/div/div/p[1]/a"));
+	    	JavascriptExecutor js = (JavascriptExecutor) webDriver; 
+			js.executeScript("arguments[0].click()", enterDescr);
+	    } catch (org.openqa.selenium.NoSuchElementException e) {
+	        System.out.println("Description already clicked");
+	    }
+		WebElement description = webDriver.findElement(By.xpath("//*[@id=\"chrome-container\"]/div[3]/div/div/div/div[4]/div[2]/div/div/div/div[2]/div/div/div[3]/textarea"));
+		description.sendKeys("This is test description");
+		WebElement save = webDriver.findElement(By.xpath("//*[@id=\"chrome-container\"]/div[3]/div/div/div/div[4]/div[2]/div/div/div/div[2]/div/div/div[3]/div/input[1]"));
+		save.click();
+		WebElement descriptionText = webDriver.findElement(By.xpath("//*[@id=\"chrome-container\"]/div[3]/div/div/div/div[4]/div[2]/div/div/div/div[2]/div/div/div[2]/p"));
+		assertEquals(descriptionText.getText(), "This is test description");
+	}
+	@Test
+	@Order(8)
+	void MakeAComment() throws InterruptedException { 
+		WebElement comment = webDriver.findElement(By.xpath("//*[@id=\"chrome-container\"]/div[3]/div/div/div/div[4]/div[11]/div[2]/form/div/div/textarea"));
+		comment.sendKeys("This is test comment yaay");
+		webDriver.findElement(By.xpath("//*[@id=\"chrome-container\"]/div[3]/div/div/div/div[4]/div[11]/div[2]/form/div/div/div[1]/input")).click();
+	}
+	
+	@Test
+	@Order(9)
+	void MakeALabel() throws InterruptedException { 
+		WebElement label = webDriver.findElement(By.xpath("//*[@id=\"chrome-container\"]/div[3]/div/div/div/div[5]/div[2]/div/a[2]"));
+		label.click();
+		WebDriverWait wait = new WebDriverWait(webDriver,Duration.ofSeconds(5));
+		WebElement orange = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("body > div.atlaskit-portal-container > div > section > div > div > ul > li:nth-child(3) > label > input")));
+		JavascriptExecutor js = (JavascriptExecutor) webDriver;  
+		js.executeScript("arguments[0].click()", orange);
+		Thread.sleep(2500);
+	}
+	@Test
+	@Order(10)
+	void ExitCard() throws InterruptedException { 
+		WebElement exitCard = webDriver.findElement(By.xpath("//*[@id=\"chrome-container\"]/div[3]/div/div/a"));
+		exitCard.click();
+	}
+	@Test
+	@Order(11)
 	void RemoveBoard() throws InterruptedException { 
 		Actions builder = new Actions(webDriver);
 		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
