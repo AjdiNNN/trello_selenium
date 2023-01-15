@@ -80,7 +80,7 @@ class Trello {
 	
 	@Test
 	@Order(4)
-	void TestBoard() throws InterruptedException { 
+	void MakeNewSwimLanes() throws InterruptedException { 
 		JavascriptExecutor js = (JavascriptExecutor) webDriver;  
 		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
 		WebElement addCard =  wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"board\"]/div/form/a")));
@@ -89,6 +89,12 @@ class Trello {
 		cardTitle.sendKeys("This is test");
 		WebElement card = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"board\"]/div/form/div/input")));
 		card.click();
+		WebElement addCard2 =  wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"board\"]/div/form/a")));
+		js.executeScript("arguments[0].click()", addCard2);
+		WebElement cardTitle2 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"board\"]/div/form/input")));
+		cardTitle2.sendKeys("This is test2");
+		WebElement card2 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"board\"]/div/form/div/input")));
+		card2.click();
 	}
 	@Test
 	@Order(5)
@@ -151,16 +157,41 @@ class Trello {
 		WebElement orange = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("body > div.atlaskit-portal-container > div > section > div > div > ul > li:nth-child(3) > label > input")));
 		JavascriptExecutor js = (JavascriptExecutor) webDriver;  
 		js.executeScript("arguments[0].click()", orange);
-		Thread.sleep(2500);
+		WebElement exit = webDriver.findElement(By.cssSelector("body > div.atlaskit-portal-container > div > section > header > button"));
+		exit.click();
 	}
 	@Test
 	@Order(10)
+	void SetADue() throws InterruptedException { 
+		WebElement dates = webDriver.findElement(By.xpath("//*[@id=\"chrome-container\"]/div[3]/div/div/div/div[5]/div[2]/div/div[1]/div/button"));
+		dates.click();
+		WebDriverWait wait = new WebDriverWait(webDriver,Duration.ofSeconds(5));
+		WebElement date31 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("body > div.atlaskit-portal-container > div > section > div > div > form > div.i75OBvhqAf7FKJ > div > div > div.css-1in5egx > div:nth-child(2) > div:nth-child(5) > button:nth-child(3)")));
+		date31.click();
+		WebElement save = webDriver.findElement(By.cssSelector("div.\\+13g83nVXr479o > button.Ts\\+YceGnvTbKoG.HPCwi137Em5EYI.ZP\\+x7L4IomBdCS.JIXQq8gDYY04N6"));
+		save.click();
+		Thread.sleep(2500);
+	}
+	@Test
+	@Order(11)
 	void ExitCard() throws InterruptedException { 
 		WebElement exitCard = webDriver.findElement(By.xpath("//*[@id=\"chrome-container\"]/div[3]/div/div/a"));
 		exitCard.click();
 	}
 	@Test
-	@Order(11)
+	@Order(12)
+	void MoveCard() throws InterruptedException { 
+		Actions builder = new Actions(webDriver);
+		WebElement card = webDriver.findElement(By.xpath("//*[@id=\"board\"]/div[1]/div/div[2]/a/div[3]"));
+		WebElement swimlane = webDriver.findElement(By.xpath("//*[@id=\"board\"]/div[2]"));
+		builder.dragAndDrop(card, swimlane);
+		builder.perform();
+		WebElement movedCardText = webDriver.findElement(By.xpath("//*[@id=\"board\"]/div[2]/div/div[2]/a/div[3]/span"));
+		assertEquals(movedCardText.getText(),"Test card");
+	}
+
+	@Test
+	@Order(13)
 	void RemoveBoard() throws InterruptedException { 
 		Actions builder = new Actions(webDriver);
 		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
