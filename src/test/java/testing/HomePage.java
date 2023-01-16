@@ -42,7 +42,6 @@ class HomePage {
 	@Test
 	void TestVideo() throws InterruptedException {
 		JavascriptExecutor js = (JavascriptExecutor) webDriver;  
-
 		webDriver.get(baseUrl);
 		//webDriver.manage().window().maximize();
 		WebElement watchVideo = webDriver.findElement(By.xpath("//*[@id=\"skip-target\"]/section[1]/div/div/div[1]/span"));
@@ -58,6 +57,7 @@ class HomePage {
 		WebElement close = webDriver.findElement(By.xpath("//*[@id=\"modal-7hb3XGCual654XH5qFVSGv\"]/div/div/div/button"));
 		close.click();
 	}
+	
 	@Test
 	void testSlides() throws InterruptedException {
 		webDriver.get(baseUrl);
@@ -89,6 +89,7 @@ class HomePage {
 		thirdSlideButton.click();
 		wait.until(ExpectedConditions.attributeContains(By.xpath("//*[@id=\"skip-target\"]/div[1]/section/div/div/div/div/div[2]/div/div/div/div[3]"), "aria-hidden", "false"));
 	}
+	
 	@Test
 	void TestDragSlider() throws InterruptedException {
 		webDriver.get(baseUrl);
