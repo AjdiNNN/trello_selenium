@@ -242,6 +242,7 @@ class Trello {
 		WebElement confirm = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("body > div.atlaskit-portal-container > div "
 				+ "> section > div > button")));
 		confirm.click();
+		
 		WebElement closed =  wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("ddfwq6CerXG2na")));
 		assertTrue(closed.isDisplayed());
 	}
